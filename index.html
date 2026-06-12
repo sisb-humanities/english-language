@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Let's Talk! — ฝึกพูดภาษาอังกฤษ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Nunito:wght@400;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#143a3a;          /* deep teal text */
+    --paper:#f0f7f3;        /* soft mint background */
+    --card:#ffffff;
+    --line:#d6e6de;
+    --accent:#e8604c;       /* warm coral */
+    --star:#f2a93b;         /* marigold */
+    --muted:#5e7a74;
+    --thai:#356e63;
+    --good:#2e9e6b;
+    --good-bg:#e4f5ec;
+    --bad:#d35454;
+    --bad-bg:#fdeaea;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{
+    font-family:'Nunito','Noto Sans Thai',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+    padding-bottom:70px;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 18px;}
+  button{font-family:inherit;cursor:pointer;}
+  button:focus-visible{outline:3px solid var(--star);outline-offset:2px;}
+
+  header{padding:28px 0 6px;}
+  .eyebrow{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700;}
+  h1{font-family:'Baloo 2','Noto Sans Thai',sans-serif;font-weight:700;font-size:clamp(28px,7vw,38px);line-height:1.15;margin-top:2px;}
+  .subtitle{font-family:'Noto Sans Thai',sans-serif;color:var(--muted);font-size:16px;margin-top:2px;}
+  .star-total{
+    margin-top:12px;background:var(--card);border:1px solid var(--line);
+    border-radius:14px;padding:10px 14px;font-size:15px;color:var(--muted);
+    display:inline-block;font-family:'Noto Sans Thai',sans-serif;
+  }
+  .star-total b{color:var(--star);font-size:17px;}
+
+  .back-btn{
+    border:none;background:none;color:var(--muted);font-weight:700;
+    font-size:15px;padding:6px 0;margin-top:14px;
+    font-family:'Noto Sans Thai',sans-serif;
+  }
+
+  /* ---------- front page ---------- */
+  .howto{
+    background:var(--ink);color:#eef6f2;border-radius:18px;
+    padding:20px 22px;margin:20px 0 24px;
+  }
+  .howto h2{font-family:'Baloo 2','Noto Sans Thai',sans-serif;font-size:20px;color:#fff;margin-bottom:10px;}
+  .howto ol{list-style:none;font-family:'Noto Sans Thai',sans-serif;font-size:15px;}
+  .howto li{display:flex;gap:12px;align-items:flex-start;padding:7px 0;}
+  .howto .step-num{
+    flex-shrink:0;width:26px;height:26px;border-radius:50%;
+    background:var(--star);color:var(--ink);font-weight:700;font-size:14px;
+    display:flex;align-items:center;justify-content:center;margin-top:2px;
+    font-family:'Baloo 2',sans-serif;
+  }
+  .week-grid{display:grid;gap:12px;}
+  .week-card{
+    display:block;width:100%;text-align:left;
+    background:var(--card);border:1.5px solid var(--line);border-radius:18px;
+    padding:18px 20px;
+  }
+  .week-card:active{border-color:var(--accent);}
+  .week-card .wk{font-family:'Baloo 2',sans-serif;font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--accent);font-weight:700;}
+  .week-card h3{font-family:'Baloo 2',sans-serif;font-size:22px;margin:2px 0 4px;}
+  .week-card .meta{font-family:'Noto Sans Thai',sans-serif;font-size:14px;color:var(--muted);}
+  .week-card .go{float:right;font-size:22px;color:var(--accent);margin-top:-34px;}
+
+  /* ---------- week page ---------- */
+  .focus-card{background:var(--ink);color:#eef6f2;border-radius:18px;padding:18px 20px;margin:14px 0 10px;}
+  .focus-card .label{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--star);font-weight:700;}
+  .focus-card h2{font-family:'Baloo 2',sans-serif;font-size:22px;margin:2px 0 6px;}
+  .focus-card p{font-size:15px;color:#cfe3da;}
+
+  /* activity menu */
+  .activity-nav{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 24px;}
+  .act-pill{
+    font-family:'Noto Sans Thai',sans-serif;font-weight:600;font-size:14px;
+    border:1.5px solid var(--line);background:var(--card);color:var(--muted);
+    border-radius:999px;padding:7px 14px;
+  }
+  .act-pill.active{background:var(--ink);border-color:var(--ink);color:#fff;}
+
+  h3.section{font-family:'Baloo 2','Noto Sans Thai',sans-serif;font-size:21px;margin:6px 0 4px;}
+  .section-hint{font-family:'Noto Sans Thai',sans-serif;font-size:14.5px;color:var(--muted);margin-bottom:14px;}
+
+  /* sentences */
+  .sentence{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 16px 14px;margin-bottom:12px;}
+  .sentence .row{display:flex;gap:12px;align-items:flex-start;}
+  .num{
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14px;
+    background:var(--paper);color:var(--accent);border-radius:8px;
+    min-width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+    margin-top:2px;flex-shrink:0;
+  }
+  .en{font-size:18px;font-weight:700;font-family:'Nunito',sans-serif;}
+  .en .gap{color:var(--accent);}
+  .th-line{font-family:'Noto Sans Thai',sans-serif;font-size:15px;color:var(--thai);margin-top:6px;display:none;}
+  .sentence.show-th .th-line{display:block;}
+  .controls{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
+  .hint-btn{border:none;background:none;color:var(--muted);font-size:13.5px;font-weight:700;padding:4px 0;font-family:'Noto Sans Thai',sans-serif;}
+  .stars{display:flex;gap:6px;align-items:center;}
+  .stars .say{font-family:'Noto Sans Thai',sans-serif;font-size:12.5px;color:var(--muted);margin-right:4px;}
+  .star{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);font-size:15px;line-height:1;color:transparent;}
+  .star.filled{background:#fdf3e0;border-color:var(--star);color:var(--star);}
+
+  /* vocab list */
+  .vocab-toggle{
+    font-family:'Noto Sans Thai',sans-serif;font-weight:600;font-size:14px;
+    border:1.5px solid var(--line);background:var(--card);color:var(--muted);
+    border-radius:999px;padding:6px 14px;margin-bottom:12px;
+  }
+  .vocab{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+  .vrow{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:12px 16px;border-bottom:1px solid var(--line);}
+  .vrow:last-child{border-bottom:none;}
+  .vrow .ven{font-weight:700;font-size:16px;font-family:'Nunito',sans-serif;}
+  .vrow .vth{font-family:'Noto Sans Thai',sans-serif;color:var(--thai);font-size:15px;text-align:right;}
+  .hide-thai .vrow .vth{filter:blur(6px);}
+  .hide-thai .vrow .vth:active{filter:none;}
+
+  /* flashcards */
+  .fc-stage{perspective:1000px;margin:6px 0 14px;}
+  .fc-card{
+    position:relative;width:100%;height:200px;border:none;background:none;
+    transform-style:preserve-3d;transition:transform .45s ease;
+  }
+  .fc-card.flipped{transform:rotateY(180deg);}
+  .fc-face{
+    position:absolute;inset:0;border-radius:20px;backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:8px;padding:20px;
+  }
+  .fc-front{background:var(--card);border:1.5px solid var(--line);}
+  .fc-back{background:var(--ink);color:#fff;transform:rotateY(180deg);}
+  .fc-word{font-family:'Nunito',sans-serif;font-weight:700;font-size:28px;text-align:center;}
+  .fc-back .fc-word{font-family:'Noto Sans Thai',sans-serif;font-size:26px;}
+  .fc-tap{font-family:'Noto Sans Thai',sans-serif;font-size:13px;color:var(--muted);}
+  .fc-back .fc-tap{color:#9fc3b8;}
+  .fc-controls{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;}
+  .fc-btn{
+    font-family:'Noto Sans Thai',sans-serif;font-weight:700;font-size:14.5px;
+    border:1.5px solid var(--line);background:var(--card);color:var(--ink);
+    border-radius:999px;padding:9px 18px;
+  }
+  .fc-count{font-family:'Baloo 2',sans-serif;font-weight:600;color:var(--muted);font-size:15px;}
+
+  /* matching */
+  .match-board{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 14px;}
+  .match-tile{
+    border:1.5px solid var(--line);background:var(--card);border-radius:14px;
+    padding:14px 10px;font-size:16px;font-weight:700;min-height:56px;
+  }
+  .match-tile.th-tile{font-family:'Noto Sans Thai',sans-serif;font-weight:600;}
+  .match-tile.selected{border-color:var(--accent);background:#fdeee9;}
+  .match-tile.matched{border-color:var(--good);background:var(--good-bg);color:var(--good);}
+  .match-tile.wrong{border-color:var(--bad);background:var(--bad-bg);}
+  .match-msg{font-family:'Noto Sans Thai',sans-serif;font-size:15px;min-height:24px;margin-bottom:8px;}
+  .match-msg.good{color:var(--good);font-weight:700;}
+
+  /* sentence sorting */
+  .sort-progress{font-family:'Baloo 2',sans-serif;color:var(--muted);font-size:15px;margin-bottom:8px;}
+  .sort-answer{
+    min-height:64px;background:var(--card);border:1.5px dashed var(--line);
+    border-radius:16px;padding:12px;display:flex;flex-wrap:wrap;gap:8px;
+    align-items:flex-start;margin-bottom:12px;
+  }
+  .sort-answer.correct{border-style:solid;border-color:var(--good);background:var(--good-bg);}
+  .sort-answer.incorrect{border-style:solid;border-color:var(--bad);background:var(--bad-bg);}
+  .sort-pool{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:44px;}
+  .chip{
+    border:1.5px solid var(--line);background:var(--card);border-radius:12px;
+    padding:9px 14px;font-size:16px;font-weight:700;font-family:'Nunito',sans-serif;
+  }
+  .sort-answer .chip{background:var(--paper);}
+  .sort-msg{font-family:'Noto Sans Thai',sans-serif;font-size:15px;min-height:24px;margin-bottom:8px;}
+  .sort-msg.good{color:var(--good);font-weight:700;}
+  .sort-msg.bad{color:var(--bad);font-weight:700;}
+  .sort-controls{display:flex;gap:10px;flex-wrap:wrap;}
+
+  .tip{
+    margin-top:26px;background:#fdf3e0;border:1px solid #f0dcb4;
+    border-radius:16px;padding:16px 18px;font-size:15px;
+    font-family:'Noto Sans Thai',sans-serif;
+  }
+  .tip b{font-family:'Baloo 2','Noto Sans Thai',sans-serif;}
+
+  .hidden{display:none;}
+
+  @media (prefers-reduced-motion: reduce){
+    .fc-card{transition:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">English Speaking Practice</div>
+    <h1>Let's Talk!</h1>
+    <div class="subtitle">ฝึกพูดภาษาอังกฤษ ทีละสัปดาห์ 🌟</div>
+    <div class="star-total">⭐ พูดออกเสียงไปแล้ว <b id="total-stars">0</b> ครั้ง</div>
+  </header>
+  <div id="app"></div>
+</div>
+
+<script>
+/* ==========================================================================
+   HOW TO ADD A NEW WEEK (for James)
+   --------------------------------------------------------------------------
+   1. Copy a whole week block between  {  and  },   (including both braces)
+   2. Paste it after the last week, before the closing  ];
+   3. Change the week number, title, focus, tip, sentences, vocab
+      and the "scramble" sentences (complete sentences for the sorting game).
+   4. Save and re-upload the file. The front page updates automatically.
+
+   Notes:
+   - In a sentence, anything between [ and ] becomes an orange gap she
+     fills with her own words, e.g. "My favourite food is [______]."
+   - "th" is the Thai support line. Leave as "" for none.
+   - "scramble" sentences should be COMPLETE sentences (no gaps) —
+     the game chops them into words for her to put back in order.
+   ========================================================================== */
+
+const WEEKS = [
+  {
+    week: 1,
+    title: "All About Me",
+    titleTh: "เรื่องของฉัน",
+    focus: "Introducing yourself and talking about your life.",
+    focusTh: "แนะนำตัวเองและพูดคุยเรื่องชีวิตประจำวัน",
+    tip: "อ่านแต่ละประโยคออกเสียงอย่างน้อย 3 ครั้งก่อนเราเจอกัน — แตะดาวทุกครั้งที่พูด พูดเบา ๆ กับตัวเองก็นับนะ! อย่าลืมเติมคำตอบของตัวเองในช่องว่างสีส้ม",
+    sentences: [
+      { en: "Hello! My name is [______]. Nice to meet you.",
+        th: "สวัสดีค่ะ ฉันชื่อ... ยินดีที่ได้รู้จักค่ะ" },
+      { en: "I'm [___] years old and I'm in Grade 10.",
+        th: "ฉันอายุ ... ปี และเรียนอยู่ชั้น ม.4" },
+      { en: "I live in [______] with my family.",
+        th: "ฉันอาศัยอยู่ที่ ... กับครอบครัว" },
+      { en: "There are [___] people in my family.",
+        th: "ครอบครัวของฉันมี ... คน" },
+      { en: "My father is a drum teacher.",
+        th: "คุณพ่อของฉันเป็นครูสอนกลอง" },
+      { en: "My favourite subject at school is [______].",
+        th: "วิชาที่ฉันชอบที่สุดคือ ..." },
+      { en: "In my free time, I like [______].",
+        th: "ในเวลาว่าง ฉันชอบ ..." },
+      { en: "My favourite food is [______].",
+        th: "อาหารที่ฉันชอบที่สุดคือ ..." },
+      { en: "I usually wake up at [___] o'clock on school days.",
+        th: "วันไปโรงเรียน ฉันมักจะตื่นนอนตอน ... โมง" },
+      { en: "I'm a little shy, but I want to practise speaking English!",
+        th: "ฉันขี้อายนิดหน่อย แต่ฉันอยากฝึกพูดภาษาอังกฤษ!" }
+    ],
+    vocab: [
+      { en: "nice to meet you", th: "ยินดีที่ได้รู้จัก" },
+      { en: "family",           th: "ครอบครัว" },
+      { en: "favourite",        th: "ที่ชอบที่สุด" },
+      { en: "subject",          th: "วิชา (ที่โรงเรียน)" },
+      { en: "free time",        th: "เวลาว่าง" },
+      { en: "hobby",            th: "งานอดิเรก" },
+      { en: "usually",          th: "มักจะ / ปกติ" },
+      { en: "wake up",          th: "ตื่นนอน" },
+      { en: "shy",              th: "ขี้อาย" },
+      { en: "practise",         th: "ฝึก / ฝึกฝน" }
+    ],
+    scramble: [
+      "Nice to meet you.",
+      "My father is a drum teacher.",
+      "My favourite subject is English.",
+      "I like listening to music.",
+      "I usually wake up at six o'clock.",
+      "I want to practise speaking English."
+    ]
+  }
+  /* , PASTE NEW WEEKS HERE */
+];
+
+/* ====================== no need to edit below this line ====================== */
+
+let stars = {};
+try { stars = JSON.parse(localStorage.getItem("practice-stars") || "{}"); } catch(e){}
+function saveStars(){ try{ localStorage.setItem("practice-stars", JSON.stringify(stars)); }catch(e){} }
+function starKey(w,s,i){ return "w"+w+"s"+s+"i"+i; }
+function updateTotal(){
+  document.getElementById("total-stars").textContent =
+    Object.values(stars).filter(Boolean).length;
+}
+function esc(t){ return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function renderGaps(text){ return esc(text).replace(/\[(.*?)\]/g,'<span class="gap">$1</span>'); }
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length-1; i > 0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function el(tag, cls, text){
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+const app = document.getElementById("app");
+
+/* ---------------- FRONT PAGE ---------------- */
+function renderHome(){
+  app.innerHTML = "";
+
+  const howto = el("div","howto");
+  howto.appendChild(el("h2","", "วิธีใช้เว็บนี้ 📖"));
+  const ol = el("ol");
+  const steps = [
+    "เลือกสัปดาห์ด้านล่าง แล้วเริ่มจากการเรียนรู้คำศัพท์ก่อน",
+    "อ่านประโยคออกเสียงอย่างน้อย 3 ครั้ง — แตะดาว ⭐ ทุกครั้งที่พูด",
+    "เติมคำตอบของตัวเองในช่องว่างสีส้ม เช่น ชื่อ อาหารที่ชอบ",
+    "เล่นเกมการ์ดคำศัพท์ จับคู่คำ และเรียงประโยค เพื่อทบทวน",
+    "ตอนเราเจอกัน เราจะคุยกันด้วยประโยคพวกนี้ — ไม่ต้องกังวล พูดผิดได้ ไม่เป็นไรเลย!"
+  ];
+  steps.forEach((s,i) => {
+    const li = el("li");
+    li.appendChild(el("span","step-num",String(i+1)));
+    li.appendChild(el("span","",s));
+    ol.appendChild(li);
+  });
+  howto.appendChild(ol);
+  app.appendChild(howto);
+
+  const grid = el("div","week-grid");
+  WEEKS.forEach((w, idx) => {
+    const card = el("button","week-card");
+    card.appendChild(el("div","wk","Week "+w.week));
+    card.appendChild(el("h3","",w.title));
+    card.appendChild(el("div","meta",
+      (w.titleTh ? w.titleTh+" · " : "") + w.sentences.length + " ประโยค · " + w.vocab.length + " คำศัพท์"));
+    card.appendChild(el("div","go","→"));
+    card.onclick = () => renderWeek(idx);
+    grid.appendChild(card);
+  });
+  app.appendChild(grid);
+  window.scrollTo(0,0);
+}
+
+/* ---------------- WEEK PAGE ---------------- */
+function renderWeek(idx){
+  const w = WEEKS[idx];
+  app.innerHTML = "";
+
+  const back = el("button","back-btn","← กลับหน้าหลัก");
+  back.onclick = renderHome;
+  app.appendChild(back);
+
+  const focus = el("div","focus-card");
+  focus.appendChild(el("div","label","Week "+w.week));
+  focus.appendChild(el("h2","",w.title));
+  focus.appendChild(el("p","",(w.focusTh || w.focus)));
+  app.appendChild(focus);
+
+  /* activity sections */
+  const sections = [
+    { id:"speak",  label:"🗣️ ประโยคฝึกพูด" },
+    { id:"vocab",  label:"📚 คำศัพท์" },
+    { id:"cards",  label:"🃏 การ์ดคำศัพท์" },
+    { id:"match",  label:"🔗 จับคู่คำ" },
+    { id:"sort",   label:"🧩 เรียงประโยค" }
+  ];
+  const nav = el("div","activity-nav");
+  app.appendChild(nav);
+
+  const panels = {};
+  sections.forEach(s => {
+    panels[s.id] = el("div");
+    app.appendChild(panels[s.id]);
+  });
+
+  function show(id){
+    sections.forEach(s => {
+      panels[s.id].classList.toggle("hidden", s.id !== id);
+      nav.children[sections.findIndex(x=>x.id===s.id)]
+        .classList.toggle("active", s.id === id);
+    });
+    window.scrollTo(0,0);
+  }
+  sections.forEach(s => {
+    const b = el("button","act-pill",s.label);
+    b.onclick = () => show(s.id);
+    nav.appendChild(b);
+  });
+
+  buildSpeak(panels.speak, w);
+  buildVocab(panels.vocab, w);
+  buildFlashcards(panels.cards, w);
+  buildMatching(panels.match, w);
+  buildSorting(panels.sort, w);
+
+  if (w.tip){
+    const tip = el("div","tip");
+    const b = el("b","", "เคล็ดลับประจำสัปดาห์ 💡");
+    tip.appendChild(b);
+    tip.appendChild(document.createElement("br"));
+    tip.appendChild(document.createTextNode(w.tip));
+    panels.speak.appendChild(tip);
+  }
+
+  show("speak");
+}
+
+/* ----- 1. sentences ----- */
+function buildSpeak(panel, w){
+  panel.appendChild(el("h3","section","Say it out loud!"));
+  panel.appendChild(el("p","section-hint",
+    "อ่านออกเสียงทีละประโยค แตะดาว ⭐ ทุกครั้งที่พูด — ลองให้ครบ 3 ดาวทุกประโยคนะ ถ้าไม่แน่ใจความหมาย แตะ “ดูคำแปล”"));
+
+  w.sentences.forEach((s, si) => {
+    const card = el("div","sentence");
+    const row = el("div","row");
+    row.appendChild(el("div","num",String(si+1)));
+    const txt = el("div");
+    const en = el("div","en");
+    en.innerHTML = renderGaps(s.en);
+    txt.appendChild(en);
+    if (s.th) txt.appendChild(el("div","th-line",s.th));
+    row.appendChild(txt);
+    card.appendChild(row);
+
+    const controls = el("div","controls");
+    if (s.th){
+      const hb = el("button","hint-btn","ดูคำแปล 🇹🇭");
+      hb.onclick = () => {
+        card.classList.toggle("show-th");
+        hb.textContent = card.classList.contains("show-th") ? "ซ่อนคำแปล" : "ดูคำแปล 🇹🇭";
+      };
+      controls.appendChild(hb);
+    } else controls.appendChild(el("span"));
+
+    const starsEl = el("div","stars");
+    starsEl.appendChild(el("span","say","พูดแล้ว:"));
+    for (let i = 0; i < 3; i++){
+      const key = starKey(w.week, si, i);
+      const st = el("button","star"+(stars[key]?" filled":""),"★");
+      st.setAttribute("aria-label","พูดประโยคที่ "+(si+1)+" ครั้งที่ "+(i+1));
+      st.onclick = () => {
+        stars[key] = !stars[key];
+        st.classList.toggle("filled", stars[key]);
+        saveStars(); updateTotal();
+      };
+      starsEl.appendChild(st);
+    }
+    controls.appendChild(starsEl);
+    card.appendChild(controls);
+    panel.appendChild(card);
+  });
+}
+
+/* ----- 2. vocab list ----- */
+function buildVocab(panel, w){
+  panel.appendChild(el("h3","section","Words to know"));
+  panel.appendChild(el("p","section-hint","เรียนรู้คำเหล่านี้ก่อน — จะเจอในประโยคฝึกพูด"));
+
+  const tog = el("button","vocab-toggle","โหมดฝึก: ซ่อนภาษาไทย 🙈");
+  panel.appendChild(tog);
+
+  const vbox = el("div","vocab");
+  w.vocab.forEach(v => {
+    const r = el("div","vrow");
+    r.appendChild(el("span","ven",v.en));
+    r.appendChild(el("span","vth",v.th));
+    vbox.appendChild(r);
+  });
+  panel.appendChild(vbox);
+  panel.appendChild(el("p","section-hint",
+    "ในโหมดฝึก: ลองนึกความหมายเอง แล้วแตะคำแปลค้างไว้เพื่อเช็กคำตอบ"));
+
+  tog.onclick = () => {
+    panel.classList.toggle("hide-thai");
+    tog.textContent = panel.classList.contains("hide-thai")
+      ? "แสดงภาษาไทย 👀" : "โหมดฝึก: ซ่อนภาษาไทย 🙈";
+  };
+}
+
+/* ----- 3. flashcards ----- */
+function buildFlashcards(panel, w){
+  panel.appendChild(el("h3","section","Flashcards"));
+  panel.appendChild(el("p","section-hint",
+    "แตะการ์ดเพื่อพลิกดูคำแปล — ลองพูดคำภาษาอังกฤษออกเสียงก่อนพลิกนะ"));
+
+  let order = shuffle(w.vocab.map((_,i)=>i));
+  let pos = 0;
+  let flipped = false;
+
+  const stage = el("div","fc-stage");
+  const card = el("button","fc-card");
+  card.setAttribute("aria-label","แตะเพื่อพลิกการ์ด");
+  const front = el("div","fc-face fc-front");
+  const fWord = el("div","fc-word");
+  front.appendChild(fWord);
+  front.appendChild(el("div","fc-tap","แตะเพื่อดูคำแปล"));
+  const backF = el("div","fc-face fc-back");
+  const bWord = el("div","fc-word");
+  backF.appendChild(bWord);
+  backF.appendChild(el("div","fc-tap","แตะเพื่อกลับไปดูภาษาอังกฤษ"));
+  card.appendChild(front); card.appendChild(backF);
+  stage.appendChild(card);
+  panel.appendChild(stage);
+
+  const controls = el("div","fc-controls");
+  const prev = el("button","fc-btn","← ก่อนหน้า");
+  const count = el("span","fc-count");
+  const next = el("button","fc-btn","ถัดไป →");
+  const shuf = el("button","fc-btn","🔀 สับการ์ด");
+  controls.appendChild(prev); controls.appendChild(count);
+  controls.appendChild(next); controls.appendChild(shuf);
+  panel.appendChild(controls);
+
+  function showCard(){
+    const v = w.vocab[order[pos]];
+    flipped = false;
+    card.classList.remove("flipped");
+    fWord.textContent = v.en;
+    bWord.textContent = v.th;
+    count.textContent = (pos+1) + " / " + order.length;
+  }
+  card.onclick = () => { flipped = !flipped; card.classList.toggle("flipped", flipped); };
+  prev.onclick = () => { pos = (pos - 1 + order.length) % order.length; showCard(); };
+  next.onclick = () => { pos = (pos + 1) % order.length; showCard(); };
+  shuf.onclick = () => { order = shuffle(order); pos = 0; showCard(); };
+  showCard();
+}
+
+/* ----- 4. matching ----- */
+function buildMatching(panel, w){
+  panel.appendChild(el("h3","section","Match the words"));
+  panel.appendChild(el("p","section-hint",
+    "จับคู่คำภาษาอังกฤษกับคำแปลภาษาไทย — แตะคำภาษาอังกฤษ แล้วแตะคำแปลที่ถูกต้อง"));
+
+  const msg = el("div","match-msg");
+  const board = el("div","match-board");
+  const newBtn = el("button","fc-btn","🔄 เล่นรอบใหม่");
+  panel.appendChild(msg);
+  panel.appendChild(board);
+  panel.appendChild(newBtn);
+
+  let selected = null;
+  let matchedCount = 0;
+  let roundSize = 0;
+
+  function newRound(){
+    board.innerHTML = "";
+    msg.textContent = "";
+    msg.className = "match-msg";
+    selected = null;
+    matchedCount = 0;
+
+    const pairs = shuffle(w.vocab).slice(0, Math.min(5, w.vocab.length));
+    roundSize = pairs.length;
+    const enTiles = shuffle(pairs.map(p => ({ side:"en", text:p.en, pair:p.en })));
+    const thTiles = shuffle(pairs.map(p => ({ side:"th", text:p.th, pair:p.en })));
+
+    const maxRows = Math.max(enTiles.length, thTiles.length);
+    for (let i = 0; i < maxRows; i++){
+      if (enTiles[i]) board.appendChild(makeTile(enTiles[i]));
+      if (thTiles[i]) board.appendChild(makeTile(thTiles[i]));
+    }
+  }
+
+  function makeTile(t){
+    const b = el("button","match-tile" + (t.side==="th" ? " th-tile" : ""), t.text);
+    b.dataset.pair = t.pair;
+    b.dataset.side = t.side;
+    b.onclick = () => tap(b);
+    return b;
+  }
+
+  function tap(tile){
+    if (tile.classList.contains("matched")) return;
+    if (!selected){
+      selected = tile;
+      tile.classList.add("selected");
+      return;
+    }
+    if (tile === selected){
+      tile.classList.remove("selected");
+      selected = null;
+      return;
+    }
+    if (tile.dataset.side === selected.dataset.side){
+      selected.classList.remove("selected");
+      selected = tile;
+      tile.classList.add("selected");
+      return;
+    }
+    /* one en + one th */
+    if (tile.dataset.pair === selected.dataset.pair){
+      tile.classList.add("matched");
+      selected.classList.add("matched");
+      selected.classList.remove("selected");
+      selected = null;
+      matchedCount++;
+      if (matchedCount === roundSize){
+        msg.textContent = "เก่งมาก! จับคู่ครบทุกคำแล้ว 🎉";
+        msg.className = "match-msg good";
+      }
+    } else {
+      const a = tile, b = selected;
+      a.classList.add("wrong"); b.classList.add("wrong");
+      b.classList.remove("selected");
+      selected = null;
+      setTimeout(() => { a.classList.remove("wrong"); b.classList.remove("wrong"); }, 500);
+    }
+  }
+
+  newBtn.onclick = newRound;
+  newRound();
+}
+
+/* ----- 5. sentence sorting ----- */
+function buildSorting(panel, w){
+  panel.appendChild(el("h3","section","Build the sentence"));
+  panel.appendChild(el("p","section-hint",
+    "แตะคำตามลำดับเพื่อเรียงให้เป็นประโยคที่ถูกต้อง — ถ้าวางผิด แตะคำในกล่องด้านบนเพื่อเอาออก แล้วอ่านประโยคออกเสียงเมื่อเรียงถูก!"));
+
+  const items = (w.scramble && w.scramble.length)
+    ? w.scramble
+    : w.sentences.map(s => s.en.replace(/\[.*?\]/g,"").replace(/\s+/g," ").trim());
+
+  let qi = 0;
+  let answer = [];
+  let pool = [];
+
+  const progress = el("div","sort-progress");
+  const ansBox = el("div","sort-answer");
+  const poolBox = el("div","sort-pool");
+  const msg = el("div","sort-msg");
+  const controls = el("div","sort-controls");
+  const resetBtn = el("button","fc-btn","↩️ เริ่มข้อนี้ใหม่");
+  const nextBtn = el("button","fc-btn","ข้อถัดไป →");
+  controls.appendChild(resetBtn);
+  controls.appendChild(nextBtn);
+  panel.appendChild(progress);
+  panel.appendChild(ansBox);
+  panel.appendChild(poolBox);
+  panel.appendChild(msg);
+  panel.appendChild(controls);
+
+  function words(sentence){ return sentence.split(/\s+/); }
+
+  function load(){
+    const target = words(items[qi]);
+    answer = [];
+    pool = shuffle(target);
+    /* reshuffle if it happens to come out already in order */
+    if (target.length > 2 && pool.join(" ") === target.join(" ")) pool = shuffle(target);
+    msg.textContent = "";
+    msg.className = "sort-msg";
+    ansBox.className = "sort-answer";
+    progress.textContent = "ข้อ " + (qi+1) + " / " + items.length;
+    draw();
+  }
+
+  function draw(){
+    ansBox.innerHTML = "";
+    poolBox.innerHTML = "";
+    answer.forEach((wd, i) => {
+      const c = el("button","chip",wd);
+      c.onclick = () => {
+        if (ansBox.classList.contains("correct")) return;
+        answer.splice(i,1);
+        pool.push(wd);
+        ansBox.className = "sort-answer";
+        msg.textContent = ""; msg.className = "sort-msg";
+        draw();
+      };
+      ansBox.appendChild(c);
+    });
+    pool.forEach((wd, i) => {
+      const c = el("button","chip",wd);
+      c.onclick = () => {
+        pool.splice(i,1);
+        answer.push(wd);
+        draw();
+        if (pool.length === 0) check();
+      };
+      poolBox.appendChild(c);
+    });
+  }
+
+  function check(){
+    const target = items[qi];
+    if (answer.join(" ") === target){
+      ansBox.classList.add("correct");
+      msg.textContent = "ถูกต้อง! เก่งมาก 🎉 อ่านประโยคนี้ออกเสียง 1 ครั้งนะ";
+      msg.className = "sort-msg good";
+    } else {
+      ansBox.classList.add("incorrect");
+      msg.textContent = "ยังไม่ถูก ลองอีกครั้งนะ — แตะคำเพื่อเอาออกแล้วเรียงใหม่";
+      msg.className = "sort-msg bad";
+    }
+  }
+
+  resetBtn.onclick = load;
+  nextBtn.onclick = () => { qi = (qi + 1) % items.length; load(); };
+  load();
+}
+
+renderHome();
+updateTotal();
+</script>
+</body>
+</html>
