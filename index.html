@@ -195,6 +195,26 @@
   }
   .tip b{font-family:'Baloo 2','Noto Sans Thai',sans-serif;}
 
+  /* word rush */
+  .big-btn{background:var(--accent);color:#fff;border-color:var(--accent);font-size:16px;padding:12px 26px;}
+  .rush-hud{display:flex;justify-content:space-between;align-items:center;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:16px;margin-bottom:10px;}
+  .rush-hud .streak{color:var(--accent);min-width:50px;text-align:center;}
+  .rush-timebar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:18px;}
+  .rush-timebar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--good),var(--star));transition:width 1s linear;}
+  .rush-timebar.low i{background:var(--bad);}
+  .rush-q{text-align:center;margin-bottom:6px;}
+  .rush-word{font-family:'Nunito',sans-serif;font-weight:700;font-size:24px;}
+  .rush-word.th{font-family:'Noto Sans Thai',sans-serif;}
+  .rush-sub{font-family:'Noto Sans Thai',sans-serif;color:var(--muted);font-size:14px;margin-top:4px;margin-bottom:14px;}
+  .rush-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .rush-opt{border:1.5px solid var(--line);background:var(--card);border-radius:14px;padding:14px 8px;font-size:16px;font-weight:700;min-height:56px;font-family:'Nunito',sans-serif;}
+  .rush-opt.th{font-family:'Noto Sans Thai',sans-serif;font-weight:600;}
+  .rush-opt.right{border-color:var(--good);background:var(--good-bg);color:var(--good);}
+  .rush-opt.wrong{border-color:var(--bad);background:var(--bad-bg);color:var(--bad);}
+  .rush-end{text-align:center;padding:10px 0;}
+  .rush-big{font-family:'Baloo 2',sans-serif;font-size:44px;font-weight:700;color:var(--accent);margin:8px 0;}
+  .rush-msg{font-family:'Noto Sans Thai',sans-serif;font-size:15px;margin-bottom:14px;color:var(--muted);}
+
   .hidden{display:none;}
 
   @media (prefers-reduced-motion: reduce){
@@ -689,6 +709,7 @@ function renderWeek(idx){
     { id:"speak",  label:"🗣️ ประโยคฝึกพูด" },
     { id:"vocab",  label:"📚 คำศัพท์" },
     { id:"cards",  label:"🃏 การ์ดคำศัพท์" },
+    { id:"rush",   label:"⚡ เกมตอบไว" },
     { id:"match",  label:"🔗 จับคู่คำ" },
     { id:"sort",   label:"🧩 เรียงประโยค" }
   ];
@@ -718,6 +739,7 @@ function renderWeek(idx){
   buildSpeak(panels.speak, w);
   buildVocab(panels.vocab, w);
   buildFlashcards(panels.cards, w);
+  buildRush(panels.rush, w);
   buildMatching(panels.match, w);
   buildSorting(panels.sort, w);
 
@@ -855,7 +877,119 @@ function buildFlashcards(panel, w){
   showCard();
 }
 
-/* ----- 4. matching ----- */
+/* ----- 4. word rush (timed vocab game) ----- */
+function buildRush(panel, w){
+  panel.appendChild(el("h3","section","Word Rush ⚡"));
+  panel.appendChild(el("p","section-hint",
+    "ตอบให้ได้มากที่สุดใน 45 วินาที! ตอบถูกติดกันได้คะแนนโบนัส 🔥"));
+
+  const box = el("div");
+  panel.appendChild(box);
+
+  const bestKey = "rush-best-w" + w.week;
+  let best = 0;
+  try { best = parseInt(localStorage.getItem(bestKey) || "0", 10) || 0; } catch(e){}
+
+  function showStart(){
+    box.innerHTML = "";
+    const wrap = el("div","rush-end");
+    wrap.appendChild(el("div","rush-big","⚡"));
+    wrap.appendChild(el("p","rush-msg","คะแนนสูงสุด: " + best));
+    const btn = el("button","fc-btn big-btn","เริ่มเกม!");
+    btn.onclick = playGame;
+    wrap.appendChild(btn);
+    box.appendChild(wrap);
+  }
+
+  function playGame(){
+    box.innerHTML = "";
+    let time = 45, score = 0, streak = 0, correct = 0, lock = false, queue = [];
+
+    const hud = el("div","rush-hud");
+    const timeSpan = el("span","","⏱ " + time);
+    const streakSpan = el("span","streak","");
+    const scoreSpan = el("span","","⭐ 0");
+    hud.appendChild(timeSpan); hud.appendChild(streakSpan); hud.appendChild(scoreSpan);
+    box.appendChild(hud);
+
+    const bar = el("div","rush-timebar");
+    const barI = el("i");
+    bar.appendChild(barI);
+    box.appendChild(bar);
+
+    const qBox = el("div");
+    box.appendChild(qBox);
+
+    function nextQ(){
+      if (!queue.length) queue = shuffle(w.vocab);
+      const word = queue.pop();
+      const enToTh = Math.random() < 0.6;
+      const others = shuffle(w.vocab.filter(v => v !== word)).slice(0,3);
+      const opts = shuffle([word, ...others]);
+
+      qBox.innerHTML = "";
+      const qWrap = el("div","rush-q");
+      qWrap.appendChild(el("div","rush-word" + (enToTh ? "" : " th"), enToTh ? word.en : word.th));
+      qWrap.appendChild(el("div","rush-sub", enToTh ? "แปลว่าอะไร?" : "ภาษาอังกฤษคือคำไหน?"));
+      qBox.appendChild(qWrap);
+
+      const optsBox = el("div","rush-opts");
+      opts.forEach(o => {
+        const b = el("button","rush-opt" + (enToTh ? "" : " th"), enToTh ? o.th : o.en);
+        b.onclick = () => {
+          if (lock || time <= 0) return;
+          lock = true;
+          const isRight = (o === word);
+          if (isRight){
+            streak++; correct++;
+            score += 10 + (streak >= 3 ? 5 : 0);
+            b.classList.add("right");
+          } else {
+            streak = 0;
+            b.classList.add("wrong");
+            [...optsBox.children].forEach((x,i) => { if (opts[i] === word) x.classList.add("right"); });
+          }
+          scoreSpan.textContent = "⭐ " + score;
+          streakSpan.textContent = streak >= 2 ? "🔥 x" + streak : "";
+          setTimeout(() => { lock = false; if (time > 0) nextQ(); }, isRight ? 450 : 900);
+        };
+        optsBox.appendChild(b);
+      });
+      qBox.appendChild(optsBox);
+    }
+    nextQ();
+
+    const timer = setInterval(() => {
+      time--;
+      timeSpan.textContent = "⏱ " + time;
+      barI.style.width = (time/45*100) + "%";
+      bar.classList.toggle("low", time <= 10);
+      if (time <= 0){
+        clearInterval(timer);
+        endGame(score, correct);
+      }
+    }, 1000);
+  }
+
+  function endGame(score, correct){
+    const isNew = score > best;
+    if (isNew){ best = score; try{ localStorage.setItem(bestKey, String(best)); }catch(e){} }
+    box.innerHTML = "";
+    const wrap = el("div","rush-end");
+    wrap.appendChild(el("p","rush-msg","หมดเวลา!"));
+    wrap.appendChild(el("div","rush-big",String(score)));
+    wrap.appendChild(el("p","rush-msg",
+      "ตอบถูก " + correct + " ข้อ" + (isNew ? " 🏆 สถิติใหม่!" : " · คะแนนสูงสุด: " + best)));
+    const btn = el("button","fc-btn big-btn","เล่นอีกครั้ง");
+    btn.onclick = playGame;
+    wrap.appendChild(btn);
+    box.appendChild(wrap);
+  }
+
+  showStart();
+}
+
+/* ----- 5. matching ----- */
 function buildMatching(panel, w){
   panel.appendChild(el("h3","section","Match the words"));
   panel.appendChild(el("p","section-hint",
@@ -941,7 +1075,7 @@ function buildMatching(panel, w){
   newRound();
 }
 
-/* ----- 5. sentence sorting ----- */
+/* ----- 6. sentence sorting ----- */
 function buildSorting(panel, w){
   panel.appendChild(el("h3","section","Build the sentence"));
   panel.appendChild(el("p","section-hint",
