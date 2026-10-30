@@ -16,6 +16,7 @@
     --star:#f2a93b;         /* marigold */
     --muted:#5e7a74;
     --thai:#356e63;
+    --swap:#2f6bd8;         /* blue: words she can swap for her own */
     --good:#2e9e6b;
     --good-bg:#e4f5ec;
     --bad:#d35454;
@@ -106,6 +107,7 @@
   }
   .en{font-size:18px;font-weight:700;font-family:'Nunito',sans-serif;}
   .en .gap{color:var(--accent);}
+  .en .swap{color:var(--swap);text-decoration:underline dotted;text-underline-offset:4px;}
   .th-line{font-family:'Noto Sans Thai',sans-serif;font-size:15px;color:var(--thai);margin-top:6px;display:none;}
   .sentence.show-th .th-line{display:block;}
   .controls{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
@@ -246,6 +248,8 @@
    Notes:
    - In a sentence, anything between [ and ] becomes an orange gap she
      fills with her own words, e.g. "My favourite food is [______]."
+   - Anything between { and } turns blue: a word she can swap for her own
+     choice, e.g. "Have you ever been to {Dream World}?"
    - "th" is the Thai support line. Leave as "" for none.
    - "scramble" sentences should be COMPLETE sentences (no gaps) —
      the game chops them into words for her to put back in order.
@@ -804,33 +808,33 @@ const WEEKS = [
     titleTh: "ที่เที่ยวใกล้บ้านและทั่วไทย",
     focus: "Three question forms to ask and answer in a group: Where's the best place to …? / Have you ever been to …? / Which is better, … or …?",
     focusTh: "คำถาม 3 แบบเกี่ยวกับสถานที่ เลือกที่ไหนก็ได้ ในกรุงเทพฯ ปทุมธานี หรือทั่วประเทศไทย",
-    tip: "สัปดาห์นี้มีคำถาม 3 แบบ แบบละ 2 ตัวอย่าง: ① Where's the best place to …? (ที่ไหนดีที่สุด — ตอบด้วย The best place is …) ② Have you ever been to …? (เคยไป…ไหม — ตอบ Yes, I have. แล้วเล่าต่อด้วย went หรือตอบ No, I haven't.) ③ Which is better, … or …? (ที่ไหนดีกว่ากัน — ตอบด้วย … is better แล้วบอกเหตุผลด้วยคำที่ลงท้าย -er เช่น closer, cooler, quieter) ชื่อสถานที่เปลี่ยนได้ทุกประโยค! เลือกที่ที่ตัวเองรู้จัก เช่น ฟิวเจอร์พาร์ค ตลาดไท ดรีมเวิลด์ ไอคอนสยาม หรือเชียงใหม่ แล้วผลัดกันถามและตอบกับเพื่อนในกลุ่มนะ",
+    tip: "สัปดาห์นี้มีคำถาม 3 แบบ แบบละ 2 ตัวอย่าง: ① Where's the best place to …? (ที่ไหนดีที่สุด — ตอบด้วย The best place is …) ② Have you ever been to …? (เคยไป…ไหม — ตอบ Yes, I have. แล้วเล่าต่อด้วย went หรือตอบ No, I haven't.) ③ Which is better, … or …? (ที่ไหนดีกว่ากัน — ตอบด้วย … is better แล้วบอกเหตุผลด้วยคำที่ลงท้าย -er เช่น closer, cooler, quieter) คำสีน้ำเงินคือชื่อสถานที่ที่เปลี่ยนได้! เลือกที่ที่ตัวเองรู้จัก เช่น ฟิวเจอร์พาร์ค ตลาดไท ดรีมเวิลด์ ไอคอนสยาม หรือเชียงใหม่ แล้วผลัดกันถามและตอบกับเพื่อนในกลุ่มนะ",
     sentences: [
       { en: "Q: Where's the best place to eat near your home?",
         th: "แถวบ้านคุณ ไปกินข้าวที่ไหนดีที่สุดคะ" },
-      { en: "A: The best place to eat is Talad Thai. The food is cheap and really good.",
+      { en: "A: The best place to eat is {Talad Thai}. The food is cheap and really good.",
         th: "ที่กินข้าวที่ดีที่สุดคือตลาดไท อาหารถูกและอร่อยมาก" },
       { en: "Q: Where's the best place to go on holiday in Thailand?",
         th: "ในประเทศไทย ไปเที่ยวที่ไหนดีที่สุดคะ" },
-      { en: "A: The best place is Chiang Mai. It's cooler, and the mountains are beautiful.",
+      { en: "A: The best place is {Chiang Mai}. It's cooler, and the mountains are beautiful.",
         th: "ที่ที่ดีที่สุดคือเชียงใหม่ อากาศเย็นกว่า และภูเขาสวยมาก" },
 
-      { en: "Q: Have you ever been to Dream World?",
+      { en: "Q: Have you ever been to {Dream World}?",
         th: "คุณเคยไปดรีมเวิลด์ไหมคะ" },
       { en: "A: Yes, I have. I went there with my class last year.",
         th: "เคย ฉันไปกับเพื่อนในห้องเมื่อปีที่แล้ว" },
-      { en: "Q: Have you ever been to Wat Arun?",
+      { en: "Q: Have you ever been to {Wat Arun}?",
         th: "คุณเคยไปวัดอรุณไหมคะ" },
       { en: "A: No, I haven't, but I'd like to go one day.",
         th: "ไม่เคย แต่สักวันหนึ่งอยากไป" },
 
-      { en: "Q: Which is better, Future Park or ICONSIAM?",
+      { en: "Q: Which is better, {Future Park} or {ICONSIAM}?",
         th: "ฟิวเจอร์พาร์คกับไอคอนสยาม ที่ไหนดีกว่ากันคะ" },
-      { en: "A: I think Future Park is better. It's closer and less crowded.",
+      { en: "A: I think {Future Park} is better. It's closer and less crowded.",
         th: "ฉันว่าฟิวเจอร์พาร์คดีกว่า ใกล้กว่าและคนน้อยกว่า" },
-      { en: "Q: Which is better for a weekend, the beach or the mountains?",
+      { en: "Q: Which is better for a weekend, {the beach} or {the mountains}?",
         th: "วันหยุดสุดสัปดาห์ ไปทะเลหรือภูเขาดีกว่ากันคะ" },
-      { en: "A: The mountains are better. It's cooler and quieter there.",
+      { en: "A: {The mountains} are better. It's cooler and quieter there.",
         th: "ภูเขาดีกว่า ที่นั่นอากาศเย็นกว่าและเงียบกว่า" }
     ],
     vocab: [
@@ -872,7 +876,7 @@ function updateTotal(){
     Object.values(stars).filter(Boolean).length;
 }
 function esc(t){ return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
-function renderGaps(text){ return esc(text).replace(/\[(.*?)\]/g,'<span class="gap">$1</span>'); }
+function renderGaps(text){ return esc(text).replace(/\[(.*?)\]/g,'<span class="gap">$1</span>').replace(/\{(.*?)\}/g,'<span class="swap">$1</span>'); }
 function shuffle(arr){
   const a = arr.slice();
   for (let i = a.length-1; i > 0; i--){
@@ -1322,7 +1326,7 @@ function buildSorting(panel, w){
 
   const items = (w.scramble && w.scramble.length)
     ? w.scramble
-    : w.sentences.map(s => s.en.replace(/\[.*?\]/g,"").replace(/\s+/g," ").trim());
+    : w.sentences.map(s => s.en.replace(/\[.*?\]/g,"").replace(/[{}]/g,"").replace(/\s+/g," ").trim());
 
   let qi = 0;
   let answer = [];
